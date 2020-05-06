@@ -94,7 +94,6 @@ class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, 
         let indexRow = indexPath.row
         let testingCenter = testingCenters[indexRow]
         mapView.setCenter(testingCenter.placemark.coordinate, animated: true)
-        print(testingCenter.name!)
     }
     
     
@@ -114,7 +113,6 @@ class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, 
         if let err = error {
             print("Error occured in search: \(err.localizedDescription)")
         } else if let res = response {
-            print("\(res.mapItems.count) matches found")
             self.mapView.removeAnnotations(self.mapView.annotations)
             for item in res.mapItems {
                 testingCenters.append(item)
