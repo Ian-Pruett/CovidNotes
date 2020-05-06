@@ -48,7 +48,7 @@ class ArticleTableViewController: UITableViewController {
         }
     }
 
-    func handleResponse (data: Data?, response: URLResponse?, error: Error?) {
+    func handleResponse(data: Data?, response: URLResponse?, error: Error?) {
         // 1. Check for error in request (e.g., no network connection)
         if let err = error {
             print("error: \(err.localizedDescription)")
