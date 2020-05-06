@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class NearbyTestingViewController: UIViewController {
+class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, UITableViewDataSource , UITableViewDelegate{
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var mapView: MKMapView!
@@ -19,6 +19,83 @@ class NearbyTestingViewController: UIViewController {
     var locationManager = CLLocationManager()
     var geoCoder = CLGeocoder()
     var testingCenters: [MKMapItem] = []
+    
+    
+    func initializeLocation() {
+        locationManager.delegate = self
+        let status = CLLocationManager.authorizationStatus()
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            startLocation()
+        case .denied, .restricted:
+            print("location not authorized")
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        @unknown default:
+            print("error")
+        }
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if ((status == .authorizedAlways)) || ((status == .authorizedWhenInUse)) {
+            self.startLocation()
+        } else {
+            self.stopLocation()
+        }
+    }
+    
+    
+    func startLocation() {
+        // https://stackoverflow.com/questions/28600380/setting-corelocation-distance-filter
+        locationManager.distanceFilter = 10
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.startUpdatingLocation()
+    }
+    
+    func stopLocation() {
+        locationManager.stopUpdatingLocation()
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        findTestingCenters()
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("locationManager error: \(error.localizedDescription)")
+    }
+
+
+    // https://www.youtube.com/watch?v=FtO5QT2D_H8
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return testingCenters.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "testingCenterCell", for: indexPath) as! TestingCenterViewCell
+        
+        // Configure the cell...
+        let indexRow = indexPath.row
+        let testingCenter = testingCenters[indexRow]
+        cell.titleLabel.text = testingCenter.name
+        return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let indexRow = indexPath.row
+        let testingCenter = testingCenters[indexRow]
+        mapView.setCenter(testingCenter.placemark.coordinate, animated: true)
+        print(testingCenter.name!)
+    }
     
     
     func findTestingCenters() {
@@ -50,9 +127,10 @@ class NearbyTestingViewController: UIViewController {
         
         tableView.reloadData()
     }
+    
 
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
@@ -60,79 +138,5 @@ class NearbyTestingViewController: UIViewController {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
         findTestingCenters()
-    }
-}
-
-extension NearbyTestingViewController: CLLocationManagerDelegate {
-    
-    func initializeLocation() {
-        locationManager.delegate = self
-        let status = CLLocationManager.authorizationStatus()
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse:
-            startLocation()
-        case .denied, .restricted:
-            print("location not authorized")
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        @unknown default:
-            print("error")
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if ((status == .authorizedAlways)) || ((status == .authorizedWhenInUse)) {
-            self.startLocation()
-        } else {
-            self.stopLocation()
-        }
-    }
-    
-    func startLocation() {
-        // https://stackoverflow.com/questions/28600380/setting-corelocation-distance-filter
-        locationManager.distanceFilter = 10
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-    }
-    
-    func stopLocation() {
-        locationManager.stopUpdatingLocation()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        findTestingCenters()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("locationManager error: \(error.localizedDescription)")
-    }
-}
-
-// https://www.youtube.com/watch?v=FtO5QT2D_H8
-extension NearbyTestingViewController: UITableViewDataSource , UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return testingCenters.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "testingCenterCell", for: indexPath) as! TestingCenterViewCell
-        
-        // Configure the cell...
-        let indexRow = indexPath.row
-        let testingCenter = testingCenters[indexRow]
-        cell.titleLabel.text = testingCenter.name
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexRow = indexPath.row
-        let testingCenter = testingCenters[indexRow]
-        mapView.setCenter(testingCenter.placemark.coordinate, animated: true)
-        print(testingCenter.name!)
     }
 }
