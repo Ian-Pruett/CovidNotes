@@ -19,6 +19,7 @@ class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, 
     var locationManager = CLLocationManager()
     var geoCoder = CLGeocoder()
     var testingCenters: [MKMapItem] = []
+    var infoIndex: Int?
     
     
     func initializeLocation() {
@@ -80,6 +81,8 @@ class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, 
         // Configure the cell...
         let indexRow = indexPath.row
         let testingCenter = testingCenters[indexRow]
+        cell.cellDelegate = self
+        cell.indexPath = indexPath
         cell.titleLabel.text = testingCenter.name
         return cell
     }
@@ -126,6 +129,20 @@ class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, 
         tableView.reloadData()
     }
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "ViewTestingCenter") {
+            let viewTestingCenterVC = segue.destination as! TestingCenterViewController
+            let testingCenter = testingCenters[infoIndex!]
+            let name = testingCenter.name
+            let phoneNumber = testingCenter.phoneNumber
+            let address: String = "\(testingCenter.placemark.subThoroughfare!) \(testingCenter.placemark.thoroughfare!), \(testingCenter.placemark.subAdministrativeArea!), \(testingCenter.placemark.administrativeArea!), \(testingCenter.placemark.postalCode!)"
+            viewTestingCenterVC.name = name
+            viewTestingCenterVC.phoneNumber = phoneNumber
+            viewTestingCenterVC.address = address
+        }
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,5 +153,11 @@ class NearbyTestingViewController: UIViewController, CLLocationManagerDelegate, 
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
         findTestingCenters()
+    }
+}
+
+extension NearbyTestingViewController: TestingCenterTableView {
+    func onClickCell(index: Int) {
+        infoIndex = index
     }
 }

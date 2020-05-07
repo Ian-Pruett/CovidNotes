@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C5B9E1E2463C044001A9FFA /* TestingCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5B9E1D2463C044001A9FFA /* TestingCenterViewController.swift */; };
 		3C7AB4252458D52A00F494C5 /* StatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7AB4242458D52A00F494C5 /* StatViewController.swift */; };
 		3C80535124624C2C0007A07A /* NearbyTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80535024624C2C0007A07A /* NearbyTestingViewController.swift */; };
 		3CD795922462753C007715E5 /* TestingCenterViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD795912462753C007715E5 /* TestingCenterViewCell.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C5B9E1D2463C044001A9FFA /* TestingCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCenterViewController.swift; sourceTree = "<group>"; };
 		3C7AB4242458D52A00F494C5 /* StatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatViewController.swift; sourceTree = "<group>"; };
 		3C80535024624C2C0007A07A /* NearbyTestingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyTestingViewController.swift; sourceTree = "<group>"; };
 		3CD795912462753C007715E5 /* TestingCenterViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCenterViewCell.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				3C7AB4242458D52A00F494C5 /* StatViewController.swift */,
 				3C80535024624C2C0007A07A /* NearbyTestingViewController.swift */,
 				3CD795912462753C007715E5 /* TestingCenterViewCell.swift */,
+				3C5B9E1D2463C044001A9FFA /* TestingCenterViewController.swift */,
 			);
 			path = CovidNotes;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 				3CF68E8B245671E700AACEA3 /* SceneDelegate.swift in Sources */,
 				3C7AB4252458D52A00F494C5 /* StatViewController.swift in Sources */,
 				3CF68EA7245772D700AACEA3 /* ArticleCell.swift in Sources */,
+				3C5B9E1E2463C044001A9FFA /* TestingCenterViewController.swift in Sources */,
 				3CD795922462753C007715E5 /* TestingCenterViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

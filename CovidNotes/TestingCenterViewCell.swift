@@ -8,9 +8,18 @@
 
 import UIKit
 
+// https://www.youtube.com/watch?v=fzjtvq-jC4E
+protocol TestingCenterTableView {
+    func onClickCell(index: Int)
+}
+
+
 class TestingCenterViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
+    
+    var cellDelegate: TestingCenterTableView?
+    var indexPath: IndexPath?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,5 +31,10 @@ class TestingCenterViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    @IBAction func infoButtonAction(_ sender: Any) {
+        cellDelegate?.onClickCell(index: indexPath!.row)
+    }
+    
 
 }
